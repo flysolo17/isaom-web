@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/saga-blue/theme.css";
+@import "primeng/resources/primeng.min.css";
+@import "primeicons/primeicons.css";
+*,
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.pi {
+  font-size: small !important;
+  font-weight: normal !important;
+}
+.p-inputtext {
+  padding: 10px !important;
+}
+
+.p-button {
+  padding: 10px !important;
+}
+.p-dialog .p-dialog-header {
+  padding: 1rem !important;
+}
