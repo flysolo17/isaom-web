@@ -1,7 +1,0 @@
-.p-menuitem-text {
-  display: none;
-}
-
-.p-menuitem:hover .p-menuitem-text {
-  display: block;
-}

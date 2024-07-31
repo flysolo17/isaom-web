@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <h6 class="modal-title">Create Lessons</h6>
+</div>
+<div class="modal-body">
+  <form class="w-100" [formGroup]="lessonForm$" (submit)="createLesson()">
+    <div class="form-floating mb-3">
+      <input
+        id="title"
+        class="form-control"
+        formControlName="title"
+        type="text"
+      />
+      <label for="title">Enter Lesson Title</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        id="desc"
+        class="form-control"
+        formControlName="desc"
+        type="desc"
+      />
+      <label for="desc">Enter Description</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <input
+        id="videoId"
+        class="form-control"
+        formControlName="videoId"
+        type="videoId"
+      />
+      <label for="videoId">Enter Youtube Video ID</label>
+    </div>
+    <div class="modal-footer">
+      <button
+        class="btn btn-danger"
+        type="button"
+        (click)="activeModal.close()"
+      >
+        Cancel
+      </button>
+      <button
+        class="btn btn-dark"
+        type="submit"
+        [disabled]="lessonForm$.invalid"
+      >
+        Save Section
+      </button>
+    </div>
+  </form>
+</div>

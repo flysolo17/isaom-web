@@ -1,17 +1,16 @@
-import { Component, HostListener, ViewChild } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { ContextMenu } from 'primeng/contextmenu';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { authActions } from './auth/store/actions';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'isaom-web';
-
-  expanded = false;
-  click() {
-    this.expanded = !this.expanded;
+  constructor(private store: Store) {}
+  ngOnInit(): void {
+    this.store.dispatch(authActions.getCurrentUser());
   }
 }

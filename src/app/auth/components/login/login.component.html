@@ -1,0 +1,63 @@
+<ng-container *ngIf="loginState$ | async as state">
+  <div
+    class="d-flex align-items-center justify-content-center vh-100"
+    style="background-color: var(--primary)"
+  >
+    <div
+      class="d-flex flex-column align-items-center justify-content-center gap-3 mw-50"
+      [style.width]="'300px'"
+    >
+      <img
+        src="../../../../assets/images/logo.png"
+        alt="logo"
+        class="img-fluid mb-3"
+        style="max-height: 80px"
+      />
+
+      <h3 class="text-primary text-center">Welcome to Isaom</h3>
+
+      <form class="w-100 gap-3" [formGroup]="loginForm$" (submit)="login()">
+        <div class="form-floating mb-3 w-100">
+          <input
+            class="form-control"
+            formControlName="email"
+            id="email"
+            type="email"
+            placeholder="Email"
+          />
+          <label for="email">Email</label>
+        </div>
+
+        <div class="form-floating mb-3 w-100">
+          <input
+            class="form-control"
+            formControlName="password"
+            id="password"
+            type="password"
+            placeholder="Password"
+          />
+          <label for="password">Password</label>
+        </div>
+
+        <button class="btn text-primary mb-3 align-self-end p-0" type="button">
+          Forgot Password?
+        </button>
+
+        <button
+          class="btn btn-primary btn-lg rounded-pill w-100"
+          type="submit"
+          [disabled]="state.isLoading"
+        >
+          <span
+            class="spinner-grow spinner-grow-sm me-3"
+            aria-hidden="true"
+            [hidden]="!state.isLoading"
+          ></span>
+          <span role="status">{{
+            state.isLoading ? "Logging in..." : "Login"
+          }}</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</ng-container>
