@@ -6,6 +6,7 @@ const initialSectionState: ISectionState = {
   isLoading: false,
   sections: [],
   error: null,
+  teachers: [],
 };
 
 const sectionFeature = createFeature({
@@ -47,6 +48,21 @@ const sectionFeature = createFeature({
       ...state,
       isLoading: false,
       error: actions.message,
+    })),
+
+    on(sectionActions.getAllTeachers, (state) => ({
+      ...state,
+      isLoading: true,
+    })),
+    on(sectionActions.getAllTeachersSuccess, (state, actions) => ({
+      ...state,
+      isLoading: false,
+      teachers: actions.data,
+    })),
+    on(sectionActions.getAllTeachersFailure, (state, actions) => ({
+      ...state,
+      isLoading: false,
+      error: actions.message,
     }))
   ),
 });
@@ -57,4 +73,5 @@ export const {
   selectIsLoading,
   selectSections,
   selectError,
+  selectTeachers,
 } = sectionFeature;

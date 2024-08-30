@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { sectionActions } from './actions';
 import { catchError, delay, exhaustMap, map, of, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { UsersService } from '../../services/users.service';
 
 @Injectable()
 export class SectionEffects {
@@ -11,7 +12,7 @@ export class SectionEffects {
     this.actions$.pipe(
       ofType(sectionActions.getAllSections),
       exhaustMap(() =>
-        this.sectionService.getAllSections().pipe(
+        this.sectionService.getAllSectionWithTeacher().pipe(
           map((data) => {
             console.log(data);
             return sectionActions.getSectionsSuccess({ sections: data });
@@ -19,6 +20,27 @@ export class SectionEffects {
           catchError((err) => {
             return of(
               sectionActions.getSectionsFailure({
+                message: err.message.toString(),
+              })
+            );
+          })
+        )
+      )
+    )
+  );
+
+  getAllTeachersEffect = createEffect(() =>
+    this.actions$.pipe(
+      ofType(sectionActions.getAllTeachers),
+      exhaustMap(() =>
+        this.usersService.getAllTeachers().pipe(
+          map((data) => {
+            console.log(data);
+            return sectionActions.getAllTeachersSuccess({ data: data });
+          }),
+          catchError((err) => {
+            return of(
+              sectionActions.getAllTeachersFailure({
                 message: err.message.toString(),
               })
             );
@@ -116,6 +138,7 @@ export class SectionEffects {
   constructor(
     private actions$: Actions,
     private sectionService: SectionService,
+    private usersService: UsersService,
     private toastr: ToastrService
   ) {}
 }

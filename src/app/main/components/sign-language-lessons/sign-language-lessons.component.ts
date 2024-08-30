@@ -25,6 +25,7 @@ export class SignLanguageLessonsComponent implements OnInit {
     lessons: this.store.select(selectLessons),
     error: this.store.select(selectError),
   });
+
   constructor(private store: Store, private sanitizer: DomSanitizer) {}
   ngOnInit(): void {
     this.store.dispatch(lessonActions.getLessons());

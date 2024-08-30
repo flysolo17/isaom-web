@@ -1,41 +1,45 @@
-<div class="modal-header">
-  <h6 class="modal-title">Create Section</h6>
-</div>
-<div class="modal-body">
-  <form class="w-100" [formGroup]="sectionForm$" (submit)="submit()">
-    <div class="form-floating mb-3">
-      <input
-        id="name"
-        class="form-control"
-        formControlName="name"
-        type="text"
-      />
-      <label for="name">Enter Section name</label>
-    </div>
-    <div class="form-floating mb-3">
-      <input
-        id="teacher"
-        class="form-control"
-        formControlName="teacher"
-        type="text"
-      />
-      <label for="teacher">Enter Teacher name</label>
-    </div>
-    <div class="modal-footer">
-      <button
-        class="btn btn-danger"
-        type="button"
-        (click)="activeModal.close()"
-      >
-        Cancel
-      </button>
-      <button
-        class="btn btn-dark"
-        type="submit"
-        [disabled]="sectionForm$.invalid"
-      >
-        Save Section
-      </button>
-    </div>
-  </form>
-</div>
+<ng-container *ngIf="createSectionState | async as state">
+  <div class="modal-header">
+    <h6 class="modal-title">Create Section</h6>
+  </div>
+  <div class="modal-body">
+    <form class="w-100" [formGroup]="sectionForm$" (submit)="submit()">
+      <div class="form-floating mb-3">
+        <input
+          id="name"
+          class="form-control"
+          formControlName="name"
+          type="text"
+        />
+        <label for="name">Enter Section name</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <select class="form-select" id="teacher" formControlName="teacher">
+          <option selected [value]="null">--Select Teacher--</option>
+          <option *ngFor="let teacher of state.teachers" [value]="teacher.id">
+            {{ teacher.name }}
+          </option>
+        </select>
+        <label for="teacher">Select Teacher</label>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="btn btn-danger"
+          type="button"
+          (click)="activeModal.close()"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn btn-dark"
+          type="submit"
+          [disabled]="sectionForm$.invalid"
+        >
+          Save Section
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-container>

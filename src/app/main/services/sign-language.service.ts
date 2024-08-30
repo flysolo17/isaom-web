@@ -38,6 +38,7 @@ export class SignLanguageService {
     );
     return collectionData(q);
   }
+
   deleteSignLanguageLesson(id: string) {
     return from(deleteDoc(doc(this.firestore, SIGN_LANGUAGE_COLLECTIONS, id)));
   }

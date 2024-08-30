@@ -1,5 +1,6 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { ISection } from '../../types/section.interface';
+import { IUsers } from '../../types/users.interface';
 
 export const sectionActions = createActionGroup({
   source: 'section',
@@ -13,5 +14,9 @@ export const sectionActions = createActionGroup({
     'Delete Section': props<{ id: string }>(),
     'Delete Success': emptyProps(),
     'Delete Failure': props<{ message: string }>(),
+
+    'Get All Teachers': emptyProps(),
+    'Get All Teachers Success': props<{ data: IUsers[] }>(),
+    'Get All Teachers Failure': props<{ message: string }>(),
   },
 });
