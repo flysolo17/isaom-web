@@ -53,8 +53,8 @@ export class SectionEffects {
   createSectionEffect = createEffect(() =>
     this.actions$.pipe(
       ofType(sectionActions.createSection),
-      exhaustMap(({ section }) =>
-        this.sectionService.createSection(section).pipe(
+      exhaustMap(({ section, teacherID }) =>
+        this.sectionService.createSection(section, teacherID).pipe(
           map(() => sectionActions.creationSuccess({ section: section })),
           catchError((err) =>
             of(

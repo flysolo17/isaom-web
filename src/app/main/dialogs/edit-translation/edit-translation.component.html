@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <h6 class="modal-title">Edit Translation</h6>
+</div>
+<div class="modal-body">
+  <form class="form" [formGroup]="translationForm$" (submit)="submit()">
+    <h5 class="mb-3">{{ translation.source }} - {{ translation.target }}</h5>
+    <div class="form-floating w-100 mb-3">
+      <input
+        class="form-control"
+        type="text"
+        readonly
+        id="text"
+        formControlName="text"
+      />
+      <label for="text">Word</label>
+    </div>
+
+    <div class="form-floating w-100 mb-3">
+      <input
+        class="form-control"
+        type="text"
+        id="translation"
+        formControlName="translation"
+      />
+      <label for="translation">Translate</label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-light" type="button" (click)="activeModal.close()">
+        Cancel
+      </button>
+      <button class="btn btn-success" type="submit">Update</button>
+    </div>
+  </form>
+</div>

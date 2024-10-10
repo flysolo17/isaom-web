@@ -8,6 +8,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
 import {
   ISignLanguageLesson,
@@ -41,5 +42,13 @@ export class SignLanguageService {
 
   deleteSignLanguageLesson(id: string) {
     return from(deleteDoc(doc(this.firestore, SIGN_LANGUAGE_COLLECTIONS, id)));
+  }
+  updateSignLanguage(lesson: ISignLanguageLesson) {
+    return updateDoc(
+      doc(this.firestore, SIGN_LANGUAGE_COLLECTIONS, lesson.id).withConverter(
+        ISignLanguageLessonsConverter
+      ),
+      lesson
+    );
   }
 }

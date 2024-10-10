@@ -1,13 +1,19 @@
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { ISection } from './section.interface';
 
 export interface IUsers {
   id: string;
   name: string;
   email: string;
   type: UserType;
-  sectionID: string;
+  sections: string[];
   gender: Gender;
   avatar: string;
+}
+
+export interface UsersWithSections {
+  users: IUsers;
+  sections: ISection[];
 }
 
 export const IUsersConverter = {

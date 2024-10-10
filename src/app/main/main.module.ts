@@ -19,6 +19,13 @@ import { SignLanguageLessonsComponent } from './components/sign-language-lessons
 import { lessonFeatureKey, lessonReducer } from './store/lessons/reducers';
 import { LessonsEffects } from './store/lessons/effects';
 import { CreateLessonsComponent } from './dialogs/create-lessons/create-lessons.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteConfirmationComponent } from './dialogs/delete-confirmation/delete-confirmation.component';
+import { EditTranslationComponent } from './dialogs/edit-translation/edit-translation.component';
+import { ViewTranslationComponent } from './dialogs/view-translation/view-translation.component';
+import { EditLessonComponent } from './dialogs/edit-lesson/edit-lesson.component';
+import { EditSectionComponent } from './dialogs/edit-section/edit-section.component';
+import { ViewSectionComponent } from './dialogs/view-section/view-section.component';
 
 @NgModule({
   declarations: [
@@ -32,11 +39,18 @@ import { CreateLessonsComponent } from './dialogs/create-lessons/create-lessons.
     CreateSectionComponent,
     SignLanguageLessonsComponent,
     CreateLessonsComponent,
+    DeleteConfirmationComponent,
+    EditTranslationComponent,
+    ViewTranslationComponent,
+    EditLessonComponent,
+    EditSectionComponent,
+    ViewSectionComponent,
   ],
   imports: [
     CommonModule,
     MainRoutingModule,
     ReactiveFormsModule,
+    NgbModule,
     StoreModule.forFeature(sectionFeatureKey, sectionReducer),
     StoreModule.forFeature(lessonFeatureKey, lessonReducer),
     EffectsModule.forFeature([SectionEffects, LessonsEffects]),

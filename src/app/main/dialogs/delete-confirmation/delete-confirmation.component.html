@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h5 class="modal-title text-danger fw-bold">Delete Confirmation</h5>
+</div>
+<div class="modal-body">
+    <div class="p-3 m-3 rounded-3 text-center" style="background-color: #FFCCCB;">
+        <i class="fa-solid fa-triangle-exclamation mb-3 text-danger fa-lg"></i>
+        <p class="text-dark fw-normal p-3 text-center">{{message}}</p>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-danger" (click)="confirm()">Confirm</button>
+    <a class="btn btn-light" (click)="cancelled()">Cancel</a>
+</div>

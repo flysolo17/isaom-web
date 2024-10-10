@@ -3,6 +3,14 @@
     <h6 class="modal-title">Create Section</h6>
   </div>
   <div class="modal-body">
+    <div
+      class="p-3 m-3 rounded-3 text-center"
+      style="background-color: #ffcccb"
+    >
+      <p class="text-dark fw-normal text-center">
+        You cannot edit teacher later please select teacher carefully.
+      </p>
+    </div>
     <form class="w-100" [formGroup]="sectionForm$" (submit)="submit()">
       <div class="form-floating mb-3">
         <input

@@ -3,11 +3,19 @@ import {
   collection,
   collectionData,
   Firestore,
+  getDocs,
   query,
   where,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { IUsers, IUsersConverter, UserType } from '../types/users.interface';
+import { from, map, mergeMap, Observable, toArray } from 'rxjs';
+import {
+  IUsers,
+  IUsersConverter,
+  UsersWithSections,
+  UserType,
+} from '../types/users.interface';
+import { ISectionConverter, ISection } from '../types/section.interface';
+import { SECTION_COLLECTION } from './section.service';
 
 export const USERS_COLLECTION = 'users';
 @Injectable({
@@ -36,13 +44,43 @@ export class UsersService {
     return collectionData(q) as Observable<IUsers[]>;
   }
 
-  getAllUsers(): Observable<IUsers[]> {
+  getAllUsersWithSections(): Observable<UsersWithSections[]> {
     const q = query(
       collection(this.firestore, USERS_COLLECTION).withConverter(
         IUsersConverter
       ),
-      where('type', 'in', [UserType.STUDENT, UserType.GUEST])
+      where('type', 'in', [UserType.STUDENT, UserType.GUEST, UserType.TEACHER])
     );
-    return collectionData(q) as Observable<IUsers[]>;
+
+    return from(getDocs(q)).pipe(
+      mergeMap((userSnapshot) => {
+        const users = userSnapshot.docs.map((doc) => doc.data() as IUsers);
+
+        return from(users).pipe(
+          mergeMap((user: IUsers) => {
+            if (user.sections.length === 0) {
+              return from([{ users: user, sections: [] }]);
+            }
+
+            const sectionQuery = query(
+              collection(this.firestore, SECTION_COLLECTION).withConverter(
+                ISectionConverter
+              ),
+              where('id', 'in', user.sections)
+            );
+
+            return from(getDocs(sectionQuery)).pipe(
+              map((sectionSnapshot) => {
+                const sections = sectionSnapshot.docs.map(
+                  (doc) => doc.data() as ISection
+                );
+                return { users: user, sections };
+              })
+            );
+          }),
+          toArray()
+        );
+      })
+    );
   }
 }

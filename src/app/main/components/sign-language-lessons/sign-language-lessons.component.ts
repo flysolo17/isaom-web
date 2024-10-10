@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ISignLanguageLesson } from '../../types/sign-language-lessons.interface';
 import { lessonActions } from '../../store/lessons/actions';
@@ -12,11 +17,14 @@ import {
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateLessonsComponent } from '../../dialogs/create-lessons/create-lessons.component';
+import { DeleteConfirmationComponent } from '../../dialogs/delete-confirmation/delete-confirmation.component';
+import { EditLessonComponent } from '../../dialogs/edit-lesson/edit-lesson.component';
 
 @Component({
   selector: 'app-sign-language-lessons',
   templateUrl: './sign-language-lessons.component.html',
   styleUrl: './sign-language-lessons.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignLanguageLessonsComponent implements OnInit {
   modalService = inject(NgbModal);
@@ -33,6 +41,19 @@ export class SignLanguageLessonsComponent implements OnInit {
 
   addLesson() {
     const modal = this.modalService.open(CreateLessonsComponent);
+  }
+  editLesson(lesson: ISignLanguageLesson) {
+    const modal = this.modalService.open(EditLessonComponent);
+    modal.componentInstance.lesson = lesson;
+  }
+  delete(lesson: ISignLanguageLesson) {
+    const modal = this.modalService.open(DeleteConfirmationComponent);
+    modal.componentInstance.message = `Are you sure you want to delele ${lesson.title} ?`;
+    modal.result.then((data) => {
+      if (data === 'YES') {
+        this.store.dispatch(lessonActions.deleteLesson({ id: lesson.id }));
+      }
+    });
   }
 
   getSanitizedUrl(videoId: string): SafeResourceUrl {

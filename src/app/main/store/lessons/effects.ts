@@ -66,6 +66,50 @@ export class LessonsEffects {
     { functional: true, dispatch: false }
   );
 
+  deleteLessonEffect = createEffect(() =>
+    this.actions$.pipe(
+      ofType(lessonActions.deleteLesson),
+      exhaustMap(({ id }) =>
+        this.signLanguageService.deleteSignLanguageLesson(id).pipe(
+          map(() => lessonActions.deleteLessonSuccess()),
+          catchError((err) =>
+            of(
+              lessonActions.deleteLessonFailed({
+                message: err['message'].toString(),
+              })
+            )
+          )
+        )
+      )
+    )
+  );
+
+  deleteLessonSuccess = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(lessonActions.deleteLessonSuccess),
+        delay(1000),
+        tap(() => {
+          this.toastr.success('Successfully Deleted!');
+        })
+      );
+    },
+    { functional: true, dispatch: false }
+  );
+
+  deleteLessonFailure = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(lessonActions.deleteLessonFailed),
+        delay(1000),
+        tap(({ message }) => {
+          this.toastr.error(message);
+        })
+      );
+    },
+    { functional: true, dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private signLanguageService: SignLanguageService,

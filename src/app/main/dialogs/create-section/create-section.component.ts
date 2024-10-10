@@ -40,11 +40,12 @@ export class CreateSectionComponent implements OnInit {
     let section: ISection = {
       id: generateRandomString(),
       name: data.name ?? '',
-      teacher: data.teacher ?? '',
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    this.store.dispatch(sectionActions.createSection({ section }));
+    this.store.dispatch(
+      sectionActions.createSection({ section, teacherID: data.teacher ?? '' })
+    );
     this.activeModal.close();
   }
 }

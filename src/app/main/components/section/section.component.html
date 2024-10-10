@@ -6,13 +6,7 @@
           Sections -
           <span class="text-muted fs-6">{{ state.sections.length }}</span>
         </h5>
-        <button
-          class="btn btn-dark"
-          (click)="submit()"
-          [disabled]="state.isLoading"
-        >
-          Create Section
-        </button>
+        <button class="btn btn-dark" (click)="submit()">Create Section</button>
       </div>
       <div class="flex-grow-1 overflow-auto">
         <table class="table table-borderless table-hover">
@@ -21,6 +15,7 @@
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Teacher</th>
+              <th scope="col">Students</th>
               <th scope="col">Created At</th>
               <th scope="col">Actions</th>
             </tr>
@@ -28,19 +23,35 @@
           <tbody>
             <tr *ngFor="let section of state.sections; index as index">
               <th scope="row">{{ index + 1 }}</th>
-              <td>{{ section.name }}</td>
-              <td>{{ section.teacher }}</td>
-              <td>{{ section.createdAt.toLocaleDateString() }}</td>
+              <td>{{ section.section.name }}</td>
+              <td>
+                <div
+                  *ngFor="let teachers of getTeacher(section); let last = last"
+                >
+                  {{ teachers.name }}<span *ngIf="!last">, </span>
+                </div>
+              </td>
+              <td>{{ getStudentCount(section) }}</td>
+              <td>{{ section.section.createdAt.toLocaleDateString() }}</td>
               <td>
                 <div class="d-flex gap-2">
-                  <button class="btn btn-sm btn-success">
+                  <button
+                    class="btn btn-sm btn-success"
+                    (click)="editSection(section)"
+                  >
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
                   <button
                     class="btn btn-sm btn-danger"
-                    (click)="deleteSection(section.id)"
+                    (click)="deleteSection(section.section)"
                   >
                     <i class="fa-solid fa-delete-left"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-secondary"
+                    (click)="viewSection(section)"
+                  >
+                    <i class="fa-solid fa-eye"></i>
                   </button>
                 </div>
               </td>
