@@ -46,7 +46,7 @@ export class MainComponent implements OnInit {
       unselectedIcon: 'fa-regular fa-book',
     },
     {
-      name: 'Lessons',
+      name: 'Sign Language',
       route: 'lessons',
       selectedIcon: 'fa-solid fa-book',
       unselectedIcon: 'fa-regular fa-book',

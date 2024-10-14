@@ -13,43 +13,58 @@
       />
     </div>
   </div>
-  <div class="row row-cols-1 row-cols-md-3 g-3">
+  <!-- <div class="row">
     <div class="col" *ngFor="let transation of filteredTranslations$ | async">
-      <div class="card h-100 w-100">
-        <div class="card-header">
-          <div class="d-flex align-items-center justify-content-between">
-            <h6>{{ transation.source }} - {{ transation.target }}</h6>
-            <div ngbDropdown class="d-inline-block">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                id="dropdownEdit"
-                ngbDropdownToggle
-              >
-                Edit
-              </button>
-              <div ngbDropdownMenu aria-labelledby="dropdownEdit">
-                <button ngbDropdownItem>View</button>
-                <button ngbDropdownItem (click)="edit(transation)">Edit</button>
-                <button ngbDropdownItem (click)="delete(transation)">
-                  Delete
+      <div class="box bg-white">
+        <h1>{{ transation.source }}</h1>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="container-fluid p-3">
+    <div class="row row-cols-3 g-2">
+      <div
+        class="col-4"
+        *ngFor="let transation of filteredTranslations$ | async"
+      >
+        <div class="card w-100">
+          <div class="card-header">
+            <div class="d-flex align-items-center justify-content-between">
+              <h6>{{ transation.source }} - {{ transation.target }}</h6>
+              <div ngbDropdown class="d-inline-block">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  id="dropdownEdit"
+                  ngbDropdownToggle
+                >
+                  Edit
                 </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownEdit">
+                  <button ngbDropdownItem>View</button>
+                  <button ngbDropdownItem (click)="edit(transation)">
+                    Edit
+                  </button>
+                  <button ngbDropdownItem (click)="delete(transation)">
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="card-body d-flex flex-column justify-content-between">
-          <div>
-            <p class="text-muted">Word</p>
-            <h6 class="text-truncate">
-              {{ transation.text }}
-            </h6>
-          </div>
-          <div>
-            <p class="text-muted">Translation</p>
-            <h6 class="text-truncate">
-              {{ transation.translation }}
-            </h6>
+          <div class="card-body d-flex flex-column justify-content-between">
+            <div>
+              <p class="text-muted">Word</p>
+              <h6 class="text-truncate">
+                {{ transation.text }}
+              </h6>
+            </div>
+            <div>
+              <p class="text-muted">Translation</p>
+              <h6 class="text-truncate">
+                {{ transation.translation }}
+              </h6>
+            </div>
           </div>
         </div>
       </div>

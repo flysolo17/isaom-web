@@ -1,1 +1,38 @@
-<p>student-report works!</p>
+<div class="container-fluid p-3">
+  <div class="box rounded-3 bg-white p-3">
+    <div class="d-flex align-items-center justify-content-between">
+      <h5>Submissions</h5>
+    </div>
+    <table class="table table-borderless table-hover rounded-3">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Activity Name</th>
+          <th>Points</th>
+
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of submission$ | async">
+          <td>
+            <div class="d-flex gap-2">
+              <img
+                [src]="item.student?.avatar"
+                style="width: 30px; height: 30px"
+                class="rounded-circle"
+              />
+              {{ item.student?.name }}
+            </div>
+          </td>
+          <td>{{ item.submission.activityName }}</td>
+          <td>
+            {{ item.submission.points }} / {{ item.submission.maxPoints }}
+          </td>
+
+          <td>{{ item.submission.createdAt | date : "short" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
