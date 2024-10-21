@@ -1,0 +1,34 @@
+<div class="modal-header">
+  <h6 class="modal-title">Assign Teacher</h6>
+</div>
+<div class="modal-body">
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item" *ngFor="let user of teachers$ | async">
+      <div
+        class="d-flex gap-3 w-100 rounded-3 p-3 align-items-center"
+        (click)="selectTeacher(user)"
+        [ngClass]="{
+          'bg-primary': selectedTeacher$?.id === user.id,
+          'bg-transparent': selectedTeacher$?.id !== user.id
+        }"
+      >
+        <img
+          [src]="user.avatar"
+          class="rounded-circle"
+          width="50px"
+          height="50px"
+        />
+        <div>
+          <span class="badge text-bg-primary" *ngIf="current?.id === user.id"
+            >Current</span
+          >
+          <h6>{{ user.name }}</h6>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-light" (click)="activeModal.close()">Cancel</button>
+  <button class="btn btn-primary" (click)="assign()">Confirm</button>
+</div>

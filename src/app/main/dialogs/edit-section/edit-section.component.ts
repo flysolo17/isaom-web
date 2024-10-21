@@ -1,15 +1,9 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Store } from '@ngrx/store';
-import { sectionActions } from '../../store/setions/actions';
+
 import { ISection } from '../../types/section.interface';
-import { combineLatest } from 'rxjs';
-import {
-  selectTeachers,
-  selectError,
-  selectIsLoading,
-} from '../../store/setions/reducers';
+
 import { SectionService } from '../../services/section.service';
 import { ToastrService } from 'ngx-toastr';
 

@@ -1,12 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest } from 'rxjs';
-import {
-  selectError,
-  selectIsLoading,
-  selectSections,
-} from '../../store/setions/reducers';
-import { sectionActions } from '../../store/setions/actions';
+import { map, Observable, of } from 'rxjs';
+
 import { ISection, ISectionWithTeachers } from '../../types/section.interface';
 import {
   NgbModal,
@@ -18,6 +13,8 @@ import { IUsers, UserType } from '../../types/users.interface';
 import { EditSectionComponent } from '../../dialogs/edit-section/edit-section.component';
 import { ViewSectionComponent } from '../../dialogs/view-section/view-section.component';
 import { DeleteConfirmationComponent } from '../../dialogs/delete-confirmation/delete-confirmation.component';
+import { SectionService } from '../../services/section.service';
+import { AssignTeacherComponent } from '../../dialogs/assign-teacher/assign-teacher.component';
 
 @Component({
   selector: 'app-section',
@@ -27,29 +24,39 @@ import { DeleteConfirmationComponent } from '../../dialogs/delete-confirmation/d
 export class SectionComponent {
   modal = inject(NgbModal);
   private offcanvasService = inject(NgbOffcanvas);
-  sectionState$ = combineLatest({
-    isLoading: this.store.select(selectIsLoading),
-    sections: this.store.select(selectSections),
-    errors: this.store.select(selectError),
-  });
-  constructor(private store: Store, config: NgbOffcanvasConfig) {
+  sectionWithUsers$: Observable<ISectionWithTeachers[]> =
+    this.sectionService.getAllSectionWithTeacher();
+
+  constructor(
+    private store: Store,
+    config: NgbOffcanvasConfig,
+    private sectionService: SectionService
+  ) {
     config.position = 'end';
   }
-  ngOnInit(): void {
-    this.store.dispatch(sectionActions.getAllSections());
-  }
+  ngOnInit(): void {}
   viewSection(section: ISectionWithTeachers) {
     const canvas = this.offcanvasService.open(ViewSectionComponent, {});
     canvas.componentInstance.section = section;
   }
   submit() {
     const modal = this.modal.open(CreateSectionComponent);
+    this.sectionWithUsers$
+      .pipe(map((state) => state.map((section) => section.section.name)))
+      .subscribe((sectionNames) => {
+        modal.componentInstance.sections = sectionNames;
+      });
   }
 
   getTeacher(section: ISectionWithTeachers): IUsers[] {
     return section.teachers.filter((e) => e.type == UserType.TEACHER);
   }
 
+  openAssign(section: ISectionWithTeachers) {
+    const modal = this.modal.open(AssignTeacherComponent);
+    (modal.componentInstance.section = section.section),
+      (modal.componentInstance.current = section.teachers[0] ?? null);
+  }
   deleteSection(section: ISection) {
     const modal = this.modal.open(DeleteConfirmationComponent);
     modal.componentInstance.message = `Are you sure you want to delete this section ? 
@@ -57,7 +64,7 @@ export class SectionComponent {
      section will be deleted including subjects,modules and activities.`;
     modal.result.then((data) => {
       if (data === 'YES') {
-        this.store.dispatch(sectionActions.deleteSection({ id: section.id }));
+        this.sectionService.deleteSection(section.id);
       }
     });
   }

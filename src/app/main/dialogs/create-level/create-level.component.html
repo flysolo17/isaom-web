@@ -1,0 +1,115 @@
+<div class="modal-header bg-dark">
+  <h5 class="modal-title text-white">Create Level</h5>
+  <button
+    type="button"
+    class="btn-close btn-light"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="levelForm$" (submit)="submit()">
+    <div class="mb-3 form-floating">
+      <input
+        id="question"
+        type="text"
+        class="form-control"
+        formControlName="question"
+      />
+      <label for="question" class="form-label">Question</label>
+      <div
+        *ngIf="
+          levelForm$.get('question')?.invalid &&
+          levelForm$.get('question')?.touched
+        "
+        class="text-danger"
+      >
+        Question is required.
+      </div>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input
+        id="image"
+        type="file"
+        class="form-control"
+        (change)="onFileSelected($event)"
+      />
+      <label for="image" class="form-label">Image</label>
+      <div
+        *ngIf="
+          levelForm$.get('image')?.invalid && levelForm$.get('image')?.touched
+        "
+        class="text-danger"
+      >
+        Image is required.
+      </div>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input
+        id="hint"
+        type="text"
+        class="form-control"
+        formControlName="hint"
+      />
+      <label for="hint" class="form-label">Hint</label>
+      <div
+        *ngIf="
+          levelForm$.get('hint')?.invalid && levelForm$.get('hint')?.touched
+        "
+        class="text-danger"
+      >
+        Hint is required.
+      </div>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input
+        id="points"
+        type="number"
+        class="form-control"
+        formControlName="points"
+      />
+      <label for="points" class="form-label">Points</label>
+      <div
+        *ngIf="
+          levelForm$.get('points')?.invalid && levelForm$.get('points')?.touched
+        "
+        class="text-danger"
+      >
+        Points must be at least 1.
+      </div>
+    </div>
+
+    <div class="mb-3 form-floating">
+      <input
+        id="answer"
+        type="text"
+        class="form-control"
+        formControlName="answer"
+      />
+      <label for="answer" class="form-label">Answer</label>
+      <div
+        *ngIf="
+          levelForm$.get('answer')?.invalid && levelForm$.get('answer')?.touched
+        "
+        class="text-danger"
+      >
+        Answer is required.
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-light" type="button" (click)="activeModal.close()">
+        Cancel
+      </button>
+      <button
+        class="btn btn-dark"
+        type="submit"
+        [disabled]="levelForm$.invalid || selectedFile == null"
+      >
+        Create
+      </button>
+    </div>
+  </form>
+</div>

@@ -10,6 +10,8 @@ import { LogsComponent } from './components/logs/logs.component';
 import { MainComponent } from './components/main/main.component';
 import { SectionComponent } from './components/section/section.component';
 import { SignLanguageLessonsComponent } from './components/sign-language-lessons/sign-language-lessons.component';
+import { GamesComponent } from './components/games/games.component';
+import { ViewGameComponent } from './components/view-game/view-game.component';
 
 const routes: Routes = [
   {
@@ -35,6 +37,14 @@ const routes: Routes = [
   {
     path: 'logs',
     component: LogsComponent,
+  },
+  {
+    path: 'games',
+    component: GamesComponent,
+  },
+  {
+    path: 'games/:id',
+    component: ViewGameComponent,
   },
   {
     path: 'lessons',

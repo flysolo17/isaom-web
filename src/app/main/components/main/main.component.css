@@ -1,15 +1,6 @@
-.sidebar {
-  width: 300px;
-  transition: width 0.3s ease-in-out;
-  padding: 1rem;
-}
-
-.sidebar.collapsed {
+.col {
   padding: 0;
-  width: 0;
-  overflow: hidden; /* Ensure content is hidden when collapsed */
 }
-
 .navigation {
   display: flex;
   width: 100%;

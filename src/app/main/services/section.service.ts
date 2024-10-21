@@ -35,6 +35,7 @@ import {
 import { generateRandomString } from '../../app.module';
 import { USERS_COLLECTION } from './users.service';
 import { IUsers, IUsersConverter } from '../types/users.interface';
+import { ToastrService } from 'ngx-toastr';
 
 export const SECTION_COLLECTION = 'sections';
 
@@ -42,7 +43,7 @@ export const SECTION_COLLECTION = 'sections';
   providedIn: 'root',
 })
 export class SectionService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private toastr: ToastrService) {}
   getAllSectionWithTeacher(): Observable<ISectionWithTeachers[]> {
     const sectionRef = collection(
       this.firestore,
@@ -50,6 +51,7 @@ export class SectionService {
     ).withConverter(ISectionConverter);
     const q = query(
       sectionRef,
+
       orderBy('createdAt', 'desc'),
       orderBy('updatedAt', 'desc')
     );
@@ -87,16 +89,11 @@ export class SectionService {
       });
     });
   }
-  createSection(section: ISection, teacherID: string) {
-    var batch = writeBatch(this.firestore);
-    batch.set(
+  createSection(section: ISection) {
+    return setDoc(
       doc(collection(this.firestore, SECTION_COLLECTION), section.id),
       section
     );
-    batch.update(doc(collection(this.firestore, USERS_COLLECTION), teacherID), {
-      sections: arrayUnion(section.id),
-    });
-    return from(batch.commit());
   }
   editSection(sectionId: string, name: string) {
     return updateDoc(doc(this.firestore, SECTION_COLLECTION, sectionId), {
@@ -104,8 +101,46 @@ export class SectionService {
       updatedAt: new Date(),
     });
   }
-  deleteSection(id: string) {
+  async deleteSection(id: string): Promise<void> {
+    try {
+      const batch = writeBatch(this.firestore);
+      const userDocs = await getDocs(
+        collection(this.firestore, USERS_COLLECTION).withConverter(
+          IUsersConverter
+        )
+      );
+
+      userDocs.forEach((userDoc) => {
+        batch.update(userDoc.ref, {
+          sections: arrayRemove(id),
+        });
+      });
+
+      batch.delete(doc(this.firestore, SECTION_COLLECTION, id));
+      await batch.commit();
+
+      this.toastr.success('Successfully Deleted!');
+    } catch (error) {
+      this.toastr.error('Error deleting section');
+    }
+  }
+
+  assignTeacher(sectionID: string, current: IUsers | null, newTeacher: IUsers) {
     const batch = writeBatch(this.firestore);
-    return from(deleteDoc(doc(this.firestore, SECTION_COLLECTION, id)));
+
+    if (current !== null) {
+      batch.update(
+        doc(collection(this.firestore, USERS_COLLECTION), current.id),
+        {
+          sections: arrayRemove(sectionID),
+        }
+      );
+    }
+
+    batch.update(doc(this.firestore, USERS_COLLECTION, newTeacher.id), {
+      sections: arrayUnion(sectionID),
+    });
+
+    return batch.commit();
   }
 }

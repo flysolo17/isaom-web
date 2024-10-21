@@ -1,11 +1,8 @@
-<ng-container *ngIf="sectionState$ | async as state">
+<ng-container>
   <div class="container-fluid h-100 p-3">
     <div class="d-flex flex-column h-100 bg-white shadow-sm p-3 rounded">
       <div class="d-flex align-items-center justify-content-between">
-        <h5>
-          Sections -
-          <span class="text-muted fs-6">{{ state.sections.length }}</span>
-        </h5>
+        <h5>Sections</h5>
         <button class="btn btn-dark" (click)="submit()">Create Section</button>
       </div>
       <div class="flex-grow-1 overflow-auto">
@@ -21,38 +18,47 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let section of state.sections; index as index">
+            <tr
+              *ngFor="let section of sectionWithUsers$ | async; index as index"
+            >
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ section.section.name }}</td>
               <td>
-                <div
-                  *ngFor="let teachers of getTeacher(section); let last = last"
-                >
-                  {{ teachers.name }}<span *ngIf="!last">, </span>
+                <div *ngIf="getTeacher(section).length > 0; else noTeacher">
+                  <div
+                    *ngFor="let teacher of getTeacher(section); let last = last"
+                  >
+                    {{ teacher.name }}<span *ngIf="!last">, </span>
+                  </div>
                 </div>
+                <ng-template #noTeacher>
+                  <div>No teacher yet</div>
+                </ng-template>
               </td>
               <td>{{ getStudentCount(section) }}</td>
               <td>{{ section.section.createdAt.toLocaleDateString() }}</td>
               <td>
-                <div class="d-flex gap-2">
+                <div ngbDropdown class="d-inline-block">
                   <button
-                    class="btn btn-sm btn-success"
-                    (click)="editSection(section)"
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    id="dropdownEdit"
+                    ngbDropdownToggle
                   >
-                    <i class="fa-solid fa-pen-to-square"></i>
+                    Edit
                   </button>
-                  <button
-                    class="btn btn-sm btn-danger"
-                    (click)="deleteSection(section.section)"
-                  >
-                    <i class="fa-solid fa-delete-left"></i>
-                  </button>
-                  <button
-                    class="btn btn-sm btn-outline-secondary"
-                    (click)="viewSection(section)"
-                  >
-                    <i class="fa-solid fa-eye"></i>
-                  </button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownEdit">
+                    <button ngbDropdownItem>View</button>
+                    <button ngbDropdownItem (click)="openAssign(section)">
+                      Assign Teacher
+                    </button>
+                    <button
+                      ngbDropdownItem
+                      (click)="deleteSection(section.section)"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </td>
             </tr>

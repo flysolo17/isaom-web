@@ -1,0 +1,66 @@
+<div class="modal-header">
+  <h5 class="modal-title">Create Game</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="activeModal.dismiss('Cross click')"
+  ></button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="gameForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        id="title"
+        type="text"
+        class="form-control"
+        formControlName="title"
+      />
+      <div
+        *ngIf="gameForm.get('title')?.invalid && gameForm.get('title')?.touched"
+        class="text-danger"
+      >
+        Title is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="title" class="form-label">Timer</label>
+      <input
+        id="timer"
+        type="number"
+        class="form-control"
+        formControlName="timer"
+      />
+      <div
+        *ngIf="gameForm.get('title')?.invalid && gameForm.get('timer')?.touched"
+        class="text-danger"
+      >
+        Timer is required.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="cover" class="form-label">Cover Image</label>
+      <input
+        id="cover"
+        type="file"
+        class="form-control"
+        (change)="onFileSelected($event)"
+      />
+      <div *ngIf="fileError" class="text-danger">Cover image is required.</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-light" (click)="activeModal.close()">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="gameForm.invalid || fileError"
+      >
+        Create
+      </button>
+    </div>
+  </form>
+</div>

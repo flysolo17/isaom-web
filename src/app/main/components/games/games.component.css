@@ -1,0 +1,15 @@
+.box {
+  padding: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  max-lines: 1;
+  text-overflow: ellipsis;
+}
+
+.card:hover {
+  background-color: var(--background);
+}

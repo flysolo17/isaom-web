@@ -1,0 +1,30 @@
+<div class="container-fluid overflow-hidden vh-100">
+  <div class="d-flex gap-2 align-items-stretch h-100 p-3">
+    <div class="box w-75 overflow-auto">
+      <div class="d-flex align-items-center justify-content-between">
+        <h5>Games</h5>
+        <button class="btn btn-dark" (click)="createGame()">Create Game</button>
+      </div>
+      <div class="row">
+        <div class="col-4" *ngFor="let game of games$ | async">
+          <div class="card mb-3" (click)="viewGame(game.id)">
+            <img
+              [src]="game.cover"
+              class="card-img-top rounded-3"
+              alt="{{ game.title }}"
+              height="180px"
+              width="100%"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ game.title }}</h5>
+              <p class="card-text">{{ game.createdAt | date }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="box w-25 overflow-auto">
+      <h5>Leaderboard</h5>
+    </div>
+  </div>
+</div>

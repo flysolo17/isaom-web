@@ -4,6 +4,7 @@ import { IUsers } from './users.interface';
 export interface ISection {
   id: string;
   name: string;
+
   createdAt: Date;
   updatedAt: Date;
 }

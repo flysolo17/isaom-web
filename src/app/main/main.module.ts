@@ -11,8 +11,7 @@ import { MainComponent } from './components/main/main.component';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { sectionFeatureKey, sectionReducer } from './store/setions/reducers';
-import { SectionEffects } from './store/setions/effects';
+
 import { CreateSectionComponent } from './dialogs/create-section/create-section.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignLanguageLessonsComponent } from './components/sign-language-lessons/sign-language-lessons.component';
@@ -26,6 +25,11 @@ import { ViewTranslationComponent } from './dialogs/view-translation/view-transl
 import { EditLessonComponent } from './dialogs/edit-lesson/edit-lesson.component';
 import { EditSectionComponent } from './dialogs/edit-section/edit-section.component';
 import { ViewSectionComponent } from './dialogs/view-section/view-section.component';
+import { GamesComponent } from './components/games/games.component';
+import { CreateGameComponent } from './dialogs/create-game/create-game.component';
+import { ViewGameComponent } from './components/view-game/view-game.component';
+import { CreateLevelComponent } from './dialogs/create-level/create-level.component';
+import { AssignTeacherComponent } from './dialogs/assign-teacher/assign-teacher.component';
 
 @NgModule({
   declarations: [
@@ -45,15 +49,20 @@ import { ViewSectionComponent } from './dialogs/view-section/view-section.compon
     EditLessonComponent,
     EditSectionComponent,
     ViewSectionComponent,
+    GamesComponent,
+    CreateGameComponent,
+    ViewGameComponent,
+    CreateLevelComponent,
+    AssignTeacherComponent,
   ],
   imports: [
     CommonModule,
     MainRoutingModule,
     ReactiveFormsModule,
     NgbModule,
-    StoreModule.forFeature(sectionFeatureKey, sectionReducer),
+
     StoreModule.forFeature(lessonFeatureKey, lessonReducer),
-    EffectsModule.forFeature([SectionEffects, LessonsEffects]),
+    EffectsModule.forFeature([LessonsEffects]),
   ],
 })
 export class MainModule {}

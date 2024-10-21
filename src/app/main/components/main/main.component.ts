@@ -2,8 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IAdministrator } from '../../../shared/types/administrator.interface';
 import { selectAdmin } from '../../../auth/store/reducers';
-import { Observable } from 'rxjs';
-import { sectionActions } from '../../store/setions/actions';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface MenuItem {
   name: string;
@@ -17,7 +16,7 @@ export interface MenuItem {
   styleUrl: './main.component.css',
 })
 export class MainComponent implements OnInit {
-  isExpanded$ = false;
+  isExpanded$ = new BehaviorSubject<boolean>(false);
 
   menuItems$: MenuItem[] = [
     {
@@ -51,6 +50,13 @@ export class MainComponent implements OnInit {
       selectedIcon: 'fa-solid fa-book',
       unselectedIcon: 'fa-regular fa-book',
     },
+
+    {
+      name: 'Games',
+      route: 'games',
+      selectedIcon: 'fa-solid fa-dice',
+      unselectedIcon: 'fa-solid fa-dice',
+    },
     {
       name: 'Logs',
       route: 'logs',
@@ -59,23 +65,12 @@ export class MainComponent implements OnInit {
     },
   ];
   ngOnInit() {
-    this.store.dispatch(sectionActions.getAllSections());
     this.menuItems$.push();
-    this.detectScreenSizes();
   }
 
   expand() {
-    this.isExpanded$ = !this.isExpanded$;
-  }
-
-  detectScreenSizes() {
-    const isLargeScreen = window.matchMedia('(min-width: 992px)').matches;
-    this.isExpanded$ = !isLargeScreen;
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.detectScreenSizes();
+    // Toggle the current value by emitting the opposite value
+    this.isExpanded$.next(!this.isExpanded$.value);
   }
 
   admin$ = this.store.select(selectAdmin);

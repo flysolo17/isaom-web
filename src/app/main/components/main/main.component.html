@@ -1,37 +1,40 @@
-<ng-container *ngIf="admin$ | async as admin">
-  <div
-    class="d-flex align-items-stretch vh-100"
-    style="background-color: var(--primary)"
-  >
+<div class="container-fluid vh-100" *ngIf="admin$ | async as admin">
+  <div class="row h-100">
     <div
-      class="align-self-stretch overflow-auto sidebar d-flex flex-column align-items-center gap-3"
-      [ngClass]="{ collapsed: isExpanded$ }"
+      class="col h-100 overflow-auto bg-dark"
+      [ngClass]="{
+        'col-2': !(isExpanded$ | async),
+        'd-none': isExpanded$ | async
+      }"
     >
-      <img
-        src="../../../../assets/images/logo.png"
-        alt="logo"
-        width="80px"
-        height="80px"
-        routerLink="dashboard"
-      />
-      <div class="navigation">
-        <ul>
-          <li
-            *ngFor="let item of menuItems$"
-            [routerLink]="item.route"
-            routerLinkActive="active"
-            class="w-100"
-          >
-            <a>
-              <i [ngClass]="item.selectedIcon" class="me-3"></i>
-              {{ item.name }}</a
+      <div class="d-flex p-2 gap-2 align-items-center flex-column">
+        <img
+          src="../../../../assets/images/logo.png"
+          alt="logo"
+          width="80px"
+          height="80px"
+          routerLink="dashboard"
+        />
+        <div class="navigation">
+          <ul>
+            <li
+              *ngFor="let item of menuItems$"
+              [routerLink]="item.route"
+              routerLinkActive="active"
+              class="w-100"
             >
-          </li>
-        </ul>
+              <a>
+                <i [ngClass]="item.selectedIcon" class="me-3"></i>
+                {{ item.name }}</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
+
     <div
-      class="flex-grow-1 overflow-hidden d-flex flex-column"
+      class="col h-100 overflow-auto"
       style="background-color: var(--background)"
     >
       <div
@@ -54,10 +57,7 @@
           />
         </div>
       </div>
-
-      <div class="flex-grow-1 overflow-y-auto">
-        <router-outlet></router-outlet>
-      </div>
+      <router-outlet></router-outlet>
     </div>
   </div>
-</ng-container>
+</div>
