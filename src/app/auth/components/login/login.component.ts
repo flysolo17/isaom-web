@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { authActions } from '../../store/actions';
 import { combineLatest } from 'rxjs';
@@ -10,6 +10,8 @@ import {
 import { Router } from '@angular/router';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ForgotPasswordComponent } from '../forgot-password/forgot-password.component';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +19,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrl: './login.component.css',
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  modalService = inject(NgbModal);
   loginState$ = combineLatest({
     isLoading: this.store.select(selectIsLoading),
     admin: this.store.select(selectAdmin),
@@ -41,5 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.store.dispatch(authActions.login(this.loginForm$.getRawValue()));
     }
   }
-  forgotPassword(event: Event) {}
+  forgotPassword() {
+    const modal = this.modalService.open(ForgotPasswordComponent);
+  }
 }

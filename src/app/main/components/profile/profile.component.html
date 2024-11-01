@@ -1,0 +1,27 @@
+<div class="container-fluid h-100 p-3">
+  <div *ngIf="user$ | async as user" class="card">
+    <div class="card-body">
+      <div class="container-fluid bg-dark text-center text-light mb-3 p-3">
+        <h5>Isaom Admin</h5>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div class="d-flex flex-column">
+          <img
+            [src]="
+              user.profile ||
+              'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
+            "
+            class="rounded-circle mb-3"
+            width="50px"
+            height="50px"
+          />
+          <h5>{{ user.name }}</h5>
+          <p class="text-muted">{{ user.email }}</p>
+        </div>
+        <button class="btn btn-dark" (click)="logout()" style="height: 40px">
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

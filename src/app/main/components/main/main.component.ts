@@ -63,6 +63,13 @@ export class MainComponent implements OnInit {
       selectedIcon: 'fa-solid fa-clipboard-list',
       unselectedIcon: 'fa-solid fa-clipboard-list',
     },
+
+    {
+      name: 'Profile',
+      route: 'profile',
+      selectedIcon: 'fa-solid fa-user',
+      unselectedIcon: 'fa-solid fa-user',
+    },
   ];
   ngOnInit() {
     this.menuItems$.push();

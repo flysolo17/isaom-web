@@ -24,9 +24,17 @@ import {
 } from '@angular/fire/storage';
 import { gameConverter, Games } from '../types/games.interface';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, take } from 'rxjs';
+import { catchError, combineLatest, map, Observable, of, take } from 'rxjs';
 import { generateRandomString } from '../../app.module';
 import { LEVELS_COLLECTION, LevelsService } from './levels.service';
+import { User } from '@angular/fire/auth';
+import {
+  UserWithGameSubmissions,
+  GameSubmission,
+  GameSubmissionConverter,
+} from '../types/game.submissions';
+import { USERS_COLLECTION } from './users.service';
+import { IUsersConverter } from '../types/users.interface';
 
 export const GAME_COLLECTION = 'games';
 
@@ -34,6 +42,8 @@ export const GAME_COLLECTION = 'games';
   providedIn: 'root',
 })
 export class GameService {
+  private GAME_SUBMISSIONS = 'matches';
+  private USERS_COLLECTION = 'users';
   gameRef$: CollectionReference;
 
   constructor(
@@ -67,6 +77,35 @@ export class GameService {
     } catch (error) {
       this.toastr.error('error creating game');
       console.error('Error creating game: ', error);
+    }
+  }
+
+  async updateGame(game: Games, file?: File): Promise<void> {
+    try {
+      let downloadURL = game.cover; // Default to existing cover if no new file is provided
+
+      if (file) {
+        // Upload the new file if provided
+        const fireRef = ref(
+          this.storage,
+          `${GAME_COLLECTION}/${generateRandomString(8)}`
+        );
+
+        const snapshot = await uploadBytes(fireRef, file);
+        downloadURL = await getDownloadURL(snapshot.ref);
+      }
+
+      // Update the game entry in Firestore
+      const updatedGame: Games = {
+        ...game,
+        cover: downloadURL,
+      };
+
+      await setDoc(doc(this.gameRef$, game.id), updatedGame);
+      this.toastr.success('Game updated successfully!');
+    } catch (error) {
+      this.toastr.error('Error updating game');
+      console.error('Error updating game:', error);
     }
   }
 
@@ -108,5 +147,65 @@ export class GameService {
   getGameByID(id: string) {
     const q = doc(this.gameRef$, id);
     return docData(q.withConverter(gameConverter));
+  }
+
+  getScores(): Observable<UserWithGameSubmissions[]> {
+    const subQuery = query(
+      collection(this.firestore, this.GAME_SUBMISSIONS).withConverter(
+        GameSubmissionConverter
+      )
+    );
+    const userQuery = query(
+      collection(this.firestore, this.USERS_COLLECTION).withConverter(
+        IUsersConverter
+      )
+    );
+    const submissions$ = collectionData(subQuery);
+    const users$ = collectionData(userQuery);
+
+    return combineLatest([submissions$, users$]).pipe(
+      map(([submissions, users]) => {
+        const groupedSubmissions = submissions.reduce((acc, submission) => {
+          const userGroup = acc[submission.userID] || [];
+          userGroup.push(submission);
+          acc[submission.userID] = userGroup;
+          return acc;
+        }, {} as { [userID: string]: GameSubmission[] });
+
+        const userWithScores: UserWithGameSubmissions[] = Object.entries(
+          groupedSubmissions
+        )
+          .map(([userID, userSubmissions]) => {
+            const user = users.find((u) => u.id === userID);
+            if (!user) return null;
+
+            const highestScoresPerGame = this.getHighestScores(userSubmissions);
+            const totalScore = highestScoresPerGame.reduce(
+              (sum, sub) => sum + sub.score,
+              0
+            );
+
+            return { user, submissions: highestScoresPerGame, totalScore };
+          })
+          .filter((entry): entry is UserWithGameSubmissions => entry !== null);
+
+        return userWithScores;
+      }),
+      catchError((error) => {
+        console.error('Error fetching data', error);
+        return of([]);
+      })
+    );
+  }
+
+  private getHighestScores(submissions: GameSubmission[]): GameSubmission[] {
+    const gameScoresMap = new Map<string, GameSubmission>();
+    submissions.forEach((submission) => {
+      const existing = gameScoresMap.get(submission.gameID);
+      if (!existing || submission.score > existing.score) {
+        gameScoresMap.set(submission.gameID, submission);
+      }
+    });
+    return Array.from(gameScoresMap.values());
   }
 }

@@ -25,6 +25,7 @@ import {
   map,
   mergeMap,
   Observable,
+  throwError,
   toArray,
 } from 'rxjs';
 import {
@@ -68,7 +69,6 @@ export class SectionService {
             ),
             where('sections', 'array-contains', section.id)
           );
-
           return new Observable<ISectionWithTeachers>((sectionObserver) => {
             onSnapshot(userQuery, (teacherSnapshot) => {
               const teachers = teacherSnapshot.docs.map(
@@ -89,12 +89,27 @@ export class SectionService {
       });
     });
   }
-  createSection(section: ISection) {
+  async createSection(section: ISection) {
+    const q = query(
+      collection(this.firestore, SECTION_COLLECTION).withConverter(
+        ISectionConverter
+      ),
+      where('name', '==', section.name)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const isAlreadyCreated = !querySnapshot.empty;
+
+    if (isAlreadyCreated) {
+      throw new Error('Section already exists.');
+    }
+
     return setDoc(
       doc(collection(this.firestore, SECTION_COLLECTION), section.id),
       section
     );
   }
+
   editSection(sectionId: string, name: string) {
     return updateDoc(doc(this.firestore, SECTION_COLLECTION, sectionId), {
       name: name,

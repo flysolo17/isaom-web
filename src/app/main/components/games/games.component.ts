@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 export class GamesComponent {
   modal = inject(NgbModal);
   games$ = this.gameService.getAllGames();
+
+  leaderboard$ = this.gameService.getScores();
   constructor(private gameService: GameService, private router: Router) {}
   createGame() {
     const dialog = this.modal.open(CreateGameComponent);

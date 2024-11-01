@@ -3,6 +3,7 @@ import {
   Auth,
   authState,
   getAuth,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 } from '@angular/fire/auth';
@@ -20,6 +21,10 @@ export const ADMINISTRATOR_COLLECTION = 'administrator';
 export class AuthService {
   constructor(private auth: Auth, private firestore: Firestore) {}
 
+  forgotPassword(email: string) {
+    return sendPasswordResetEmail(this.auth, email);
+  }
+
   login(email: string, password: string): Observable<IAdministrator> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap((data) => {
@@ -32,6 +37,26 @@ export class AuthService {
       })
     );
   }
+  // async uploadProfile(file: File) {
+  //   try {
+  //     const user = this.auth.currentUser;
+  //     if (user) {
+  //       const fireRef = ref(
+  //         this.storage,
+  //         `${user.uid}/${this._collection_name}/${uuidv4()}`
+  //       );
+
+  //       await uploadBytes(fireRef, file);
+  //       const downloadURL = await getDownloadURL(fireRef);
+  //       return downloadURL;
+  //     } else {
+  //       throw new Error('No user signed in.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error uploading file:', error);
+  //     throw error;
+  //   }
+  // }
 
   getCurrentUser(): Observable<IAdministrator | null> {
     return authState(this.auth).pipe(

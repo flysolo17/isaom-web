@@ -12,6 +12,7 @@ import { SectionComponent } from './components/section/section.component';
 import { SignLanguageLessonsComponent } from './components/sign-language-lessons/sign-language-lessons.component';
 import { GamesComponent } from './components/games/games.component';
 import { ViewGameComponent } from './components/view-game/view-game.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
   {
     path: 'lessons',
     component: SignLanguageLessonsComponent,
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
   },
 ];
 

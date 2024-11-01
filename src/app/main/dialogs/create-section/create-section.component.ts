@@ -46,7 +46,7 @@ export class CreateSectionComponent implements OnInit, OnChanges {
     private toastr: ToastrService
   ) {
     this.sectionForm$ = fb.nonNullable.group({
-      name: ['', Validators.required],
+      name: [null, Validators.required],
     });
   }
   ngOnChanges(changes: SimpleChanges): void {}

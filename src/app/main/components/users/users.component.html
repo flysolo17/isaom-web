@@ -45,7 +45,13 @@
     <div class="col-12">
       <div class="box">
         <div class="d-flex align-items-center justify-content-between p-3">
-          <h4>Accounts</h4>
+          <input
+            type="text"
+            [formControl]="searchControl"
+            style="width: 400px"
+            placeholder="Search users..."
+            class="form-control"
+          />
           <ul ngbNav #nav="ngbNav" class="nav-tabs">
             <li ngbNavItem>
               <button ngbNavLink>Students</button>

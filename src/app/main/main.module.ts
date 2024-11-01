@@ -13,7 +13,7 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { CreateSectionComponent } from './dialogs/create-section/create-section.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SignLanguageLessonsComponent } from './components/sign-language-lessons/sign-language-lessons.component';
 import { lessonFeatureKey, lessonReducer } from './store/lessons/reducers';
 import { LessonsEffects } from './store/lessons/effects';
@@ -30,6 +30,8 @@ import { CreateGameComponent } from './dialogs/create-game/create-game.component
 import { ViewGameComponent } from './components/view-game/view-game.component';
 import { CreateLevelComponent } from './dialogs/create-level/create-level.component';
 import { AssignTeacherComponent } from './dialogs/assign-teacher/assign-teacher.component';
+import { EditLevelComponent } from './dialogs/edit-level/edit-level.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -54,11 +56,14 @@ import { AssignTeacherComponent } from './dialogs/assign-teacher/assign-teacher.
     ViewGameComponent,
     CreateLevelComponent,
     AssignTeacherComponent,
+    EditLevelComponent,
+    ProfileComponent,
   ],
   imports: [
     CommonModule,
     MainRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     NgbModule,
 
     StoreModule.forFeature(lessonFeatureKey, lessonReducer),

@@ -2,6 +2,18 @@
   <div class="box rounded-3 bg-white p-3">
     <div class="d-flex align-items-center justify-content-between">
       <h5>Submissions</h5>
+      <div class="input-group mb-3 w-25">
+        <span class="input-group-text">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <input
+          type="text"
+          [formControl]="searchControl"
+          class="form-control"
+          placeholder="Search student name here.."
+          aria-label="text"
+        />
+      </div>
     </div>
     <table class="table table-borderless table-hover rounded-3">
       <thead>
@@ -14,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of submission$ | async">
+        <tr *ngFor="let item of filteredSubmissions$ | async">
           <td>
             <div class="d-flex gap-2">
               <img

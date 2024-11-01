@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StudentReportComponent } from './student-report.component';
+import { EditLevelComponent } from './edit-level.component';
 
-describe('StudentReportComponent', () => {
-  let component: StudentReportComponent;
-  let fixture: ComponentFixture<StudentReportComponent>;
+describe('EditLevelComponent', () => {
+  let component: EditLevelComponent;
+  let fixture: ComponentFixture<EditLevelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StudentReportComponent]
+      declarations: [EditLevelComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(StudentReportComponent);
+    fixture = TestBed.createComponent(EditLevelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

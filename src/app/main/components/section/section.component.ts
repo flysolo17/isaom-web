@@ -28,7 +28,6 @@ export class SectionComponent {
     this.sectionService.getAllSectionWithTeacher();
 
   constructor(
-    private store: Store,
     config: NgbOffcanvasConfig,
     private sectionService: SectionService
   ) {
