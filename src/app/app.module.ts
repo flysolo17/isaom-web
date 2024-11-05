@@ -20,7 +20,6 @@ import { AuthEffects } from './auth/store/effects';
 import { MainModule } from './main/main.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
-//primeng
 
 @NgModule({
   declarations: [AppComponent],

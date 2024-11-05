@@ -82,10 +82,9 @@ export class GameService {
 
   async updateGame(game: Games, file?: File): Promise<void> {
     try {
-      let downloadURL = game.cover; // Default to existing cover if no new file is provided
+      let downloadURL = game.cover;
 
       if (file) {
-        // Upload the new file if provided
         const fireRef = ref(
           this.storage,
           `${GAME_COLLECTION}/${generateRandomString(8)}`
@@ -124,10 +123,8 @@ export class GameService {
 
       await batch.commit();
 
-      // Delete the cover image from Firebase Storage
       await deleteObject(ref(this.storage, game.cover));
 
-      // Delete the game document from Firestore
       await deleteDoc(doc(this.gameRef$, game.id));
 
       this.toastr.success('Successfully Deleted');

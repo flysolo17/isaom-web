@@ -10,15 +10,21 @@
         />
         <div>
           <h5>{{ gameState.games?.title }}</h5>
+          <h6>Timer : {{ gameState.games?.timer }} minute</h6>
           <p>{{ gameState.games?.createdAt | date }}</p>
         </div>
       </div>
-      <button
-        class="btn btn-dark rounded-3"
-        (click)="createLevel(gameState.games?.id!)"
-      >
-        Create Level
-      </button>
+      <div class="d-flex gap-3">
+        <button class="btn btn-danger" (click)="deleteGame(gameState.games!!)">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+        <button
+          class="btn btn-dark rounded-3"
+          (click)="createLevel(gameState.games?.id!)"
+        >
+          Create Level
+        </button>
+      </div>
     </div>
 
     <table class="table table-hover table-borderless">

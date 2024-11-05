@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateLevelComponent } from '../../dialogs/create-level/create-level.component';
 import { DeleteConfirmationComponent } from '../../dialogs/delete-confirmation/delete-confirmation.component';
 import { ToastrService } from 'ngx-toastr';
+import { Location } from '@angular/common';
 
 export interface GameState {
   games: Games | undefined;
@@ -27,7 +28,8 @@ export class ViewGameComponent implements OnInit {
     private route: ActivatedRoute,
     private gameService: GameService,
     private levelService: LevelsService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +52,16 @@ export class ViewGameComponent implements OnInit {
     modal.result.then((data) => {
       if (data === 'YES') {
         this.levelService.deleteLevels(this.gameID, level);
+      }
+    });
+  }
+
+  deleteGame(game: Games) {
+    const modal = this.modalService.open(DeleteConfirmationComponent);
+    modal.componentInstance.message = `Are you sure you want to delete this Game ?`;
+    modal.result.then((data) => {
+      if (data === 'YES') {
+        this.gameService.deleteGame(game);
       }
     });
   }

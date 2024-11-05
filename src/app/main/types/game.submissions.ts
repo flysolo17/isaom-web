@@ -7,9 +7,11 @@ export interface GameSubmission {
   gameID: string;
   score: number;
 }
+
 export const GameSubmissionConverter = {
-  toFirestore: (data: GameSubmission) => data,
+  toFirestore: (data: GameSubmission) => data, // to json
   fromFirestore: (snap: QueryDocumentSnapshot) => {
+    // from json
     const data = snap.data() as GameSubmission;
     return data;
   },

@@ -43,7 +43,7 @@ export class CreateGameComponent {
       title: this.gameForm.value.title,
       cover: '',
       createdAt: new Date(),
-      timer: 0,
+      timer: this.gameForm.value.timer,
     };
 
     try {
