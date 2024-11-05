@@ -28,7 +28,10 @@
 
       <ul class="list-group list-group-flush">
         <li class="list-group-item" *ngFor="let sub of leaderboard$ | async">
-          <div class="d-flex gap-3 align-items-center">
+          <div
+            class="d-flex gap-3 align-items-center"
+            (click)="viewMathes(sub.user.id)"
+          >
             <img
               [src]="sub.user.avatar"
               class="rounded-circle"

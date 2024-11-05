@@ -1,0 +1,53 @@
+<div class="container-fluid p-3">
+  <div class="d-flex align-items-stretch gap-3">
+    <div class="box w-25 bg-white rounded-3" *ngIf="user$ | async as user">
+      <img
+        [src]="user.avatar"
+        class="rounded-circle mb-3"
+        width="80px"
+        height="80px"
+      />
+      <h5>{{ user.name }}</h5>
+      <span class="text-muted">{{ user.type }}</span>
+      <div class="d-flex gap-3 mt-3">
+        <div
+          class="d-flex flex-column align-items-center justify-content-center gap-1 flex-grow-1 p-3 rounded-3"
+          style="background-color: var(--background)"
+        >
+          <h5 class="fw-bold">{{ totalMatches }}</h5>
+          <span class="text-muted"> Matches</span>
+        </div>
+
+        <div
+          class="d-flex flex-column gap-1 flex-grow-1 p-3 align-items-center justify-content-center rounded-3"
+          style="background-color: var(--background)"
+        >
+          <h5 class="fw-bold">{{ totalPoints }}</h5>
+          <span class="text-muted"> Points</span>
+        </div>
+      </div>
+    </div>
+    <div class="box flex-grow-1 bg-white rounded-3 overflow-auto">
+      <div class="row">
+        <div class="col-12 p-3"><h4>Recently Played</h4></div>
+        <div class="col-4" *ngFor="let game of matchesWithGame$">
+          <div class="card mb-3">
+            <img
+              [src]="game.game?.cover"
+              class="card-img-top rounded-3"
+              alt="{{ game.game?.title }}"
+              height="180px"
+              width="100%"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ game.game?.title }}</h5>
+              <p class="card-text text-muted fw-bold">
+                Matches {{ game.matches.length }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

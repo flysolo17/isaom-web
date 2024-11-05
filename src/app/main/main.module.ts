@@ -32,6 +32,7 @@ import { CreateLevelComponent } from './dialogs/create-level/create-level.compon
 import { AssignTeacherComponent } from './dialogs/assign-teacher/assign-teacher.component';
 import { EditLevelComponent } from './dialogs/edit-level/edit-level.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ViewLeaderboardComponent } from './components/view-leaderboard/view-leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     AssignTeacherComponent,
     EditLevelComponent,
     ProfileComponent,
+    ViewLeaderboardComponent,
   ],
   imports: [
     CommonModule,

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {
   collection,
   collectionData,
+  doc,
+  docData,
   Firestore,
   getDocs,
   query,
@@ -82,5 +84,14 @@ export class UsersService {
         );
       })
     );
+  }
+
+  getUserByID(uid: string): Observable<IUsers | null> {
+    const userDocRef = doc(
+      collection(this.firestore, USERS_COLLECTION),
+      uid
+    ).withConverter(IUsersConverter);
+
+    return docData(userDocRef, { idField: 'id' }) as Observable<IUsers | null>;
   }
 }

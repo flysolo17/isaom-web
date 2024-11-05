@@ -13,6 +13,7 @@ import { SignLanguageLessonsComponent } from './components/sign-language-lessons
 import { GamesComponent } from './components/games/games.component';
 import { ViewGameComponent } from './components/view-game/view-game.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ViewLeaderboardComponent } from './components/view-leaderboard/view-leaderboard.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: 'games',
     component: GamesComponent,
+  },
+  {
+    path: 'games/matches/:id',
+    component: ViewLeaderboardComponent,
   },
   {
     path: 'games/:id',

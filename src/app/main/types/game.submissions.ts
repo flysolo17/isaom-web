@@ -2,12 +2,14 @@ import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { IUsers } from './users.interface';
 
 export interface GameSubmission {
-  id: string;
-  userID: string;
+  answerSheet: Record<string, string>;
+  createdAt: Date;
   gameID: string;
+  id: string;
+  maxScore: number;
   score: number;
+  userID: string;
 }
-
 export const GameSubmissionConverter = {
   toFirestore: (data: GameSubmission) => data, // to json
   fromFirestore: (snap: QueryDocumentSnapshot) => {

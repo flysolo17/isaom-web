@@ -4,6 +4,7 @@ import { CreateGameComponent } from '../../dialogs/create-game/create-game.compo
 import { GameService } from '../../services/game.service';
 import { Games } from '../../types/games.interface';
 import { Router } from '@angular/router';
+import { user } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-games',
@@ -24,5 +25,9 @@ export class GamesComponent {
   }
   viewGame(gameID: string) {
     this.router.navigate(['main/games', gameID]);
+  }
+
+  viewMathes(userID: string) {
+    this.router.navigate(['main/games/matches', userID]);
   }
 }

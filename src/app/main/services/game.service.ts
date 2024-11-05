@@ -8,10 +8,12 @@ import {
   doc,
   docData,
   Firestore,
+  getDoc,
   getDocs,
   orderBy,
   query,
   setDoc,
+  where,
   writeBatch,
 } from '@angular/fire/firestore';
 import {
@@ -24,7 +26,16 @@ import {
 } from '@angular/fire/storage';
 import { gameConverter, Games } from '../types/games.interface';
 import { ToastrService } from 'ngx-toastr';
-import { catchError, combineLatest, map, Observable, of, take } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  from,
+  map,
+  Observable,
+  of,
+  switchMap,
+  take,
+} from 'rxjs';
 import { generateRandomString } from '../../app.module';
 import { LEVELS_COLLECTION, LevelsService } from './levels.service';
 import { User } from '@angular/fire/auth';
@@ -35,6 +46,7 @@ import {
 } from '../types/game.submissions';
 import { USERS_COLLECTION } from './users.service';
 import { IUsersConverter } from '../types/users.interface';
+import { MatchesWithGame } from '../types/MatchWithGame';
 
 export const GAME_COLLECTION = 'games';
 
@@ -204,5 +216,41 @@ export class GameService {
       }
     });
     return Array.from(gameScoresMap.values());
+  }
+  getMatchesByUID(uid: string): Observable<MatchesWithGame[]> {
+    const q = query(
+      collection(this.firestore, this.GAME_SUBMISSIONS).withConverter(
+        GameSubmissionConverter
+      ),
+      where('userID', '==', uid)
+    );
+    return collectionData(q).pipe(
+      switchMap((submissions: GameSubmission[]) => {
+        console.log('Game Submissions : ', submissions);
+        const uniqueGameIDs = [
+          ...new Set(submissions.map((submission) => submission.gameID)),
+        ];
+        const gameQuery = query(
+          collection(this.firestore, GAME_COLLECTION).withConverter(
+            gameConverter
+          ),
+          where('id', 'in', uniqueGameIDs)
+        );
+        const games$ = from(getDocs(gameQuery)).pipe(
+          map((snapshot) => snapshot.docs.map((doc) => doc.data() as Games))
+        );
+        return combineLatest([games$]).pipe(
+          map(([games]) => {
+            const matchesWithGames: MatchesWithGame[] = games.map((game) => ({
+              game: game || null,
+              matches: submissions.filter(
+                (submission) => submission.gameID === game.id
+              ),
+            }));
+            return matchesWithGames;
+          })
+        );
+      })
+    );
   }
 }
