@@ -158,4 +158,11 @@ export class SectionService {
 
     return batch.commit();
   }
+  async getSectionByID(id: string): Promise<ISection | null> {
+    const docRef = doc(this.firestore, SECTION_COLLECTION, id).withConverter(
+      ISectionConverter
+    );
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists() ? docSnap.data() : null;
+  }
 }

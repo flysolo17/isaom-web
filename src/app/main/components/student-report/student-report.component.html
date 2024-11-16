@@ -20,6 +20,8 @@
         <tr>
           <th>Student Name</th>
           <th>Activity Name</th>
+          <th>Grade Level</th>
+          <th>Subject</th>
           <th>Points</th>
 
           <th>Created At</th>
@@ -30,14 +32,18 @@
           <td>
             <div class="d-flex gap-2">
               <img
-                [src]="item.student?.avatar"
+                [src]="item.student?.users?.avatar"
                 style="width: 30px; height: 30px"
                 class="rounded-circle"
               />
-              {{ item.student?.name }}
+              {{ item.student?.users?.name }}
             </div>
           </td>
           <td>{{ item.submission.activityName }}</td>
+          <td>
+            {{ item.student?.section?.name }}
+          </td>
+          <td>{{ item.subject?.name }}</td>
           <td>
             {{ item.submission.points }} / {{ item.submission.maxPoints }}
           </td>

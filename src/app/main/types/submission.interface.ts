@@ -4,10 +4,14 @@ import {
 } from '@angular/fire/firestore';
 import { Timestamp } from 'firebase/firestore';
 import { IUsers } from './users.interface';
+import { Subjects } from './subjects';
+import { ISection } from './section.interface';
+import { UserWithSection } from './UserWithSection';
 
-export interface SubmissionWIthStudent {
-  student?: IUsers;
+export interface SubmissionWIthStudentSubjectAndSection {
+  student: UserWithSection | null;
   submission: Submissions;
+  subject: Subjects | null;
 }
 export interface Submissions {
   id?: string;
