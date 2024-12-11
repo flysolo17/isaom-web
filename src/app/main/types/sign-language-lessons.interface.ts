@@ -5,7 +5,14 @@ export interface ISignLanguageLesson {
   title: string;
   desc: string;
   videoId: string;
+  dificulty: Dificulty;
   createdAt: Date;
+}
+
+export enum Dificulty {
+  BEGINNER = 'BEGINNER ',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
 }
 
 export const ISignLanguageLessonsConverter = {

@@ -13,6 +13,7 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
   where,
   writeBatch,
 } from '@angular/fire/firestore';
@@ -65,6 +66,12 @@ export class GameService {
     private levelService: LevelsService
   ) {
     this.gameRef$ = collection(firestore, GAME_COLLECTION);
+  }
+
+  addQuestionID(gameID: string, questions: string[]) {
+    updateDoc(doc(this.gameRef$, gameID).withConverter(gameConverter), {
+      questions: questions,
+    });
   }
 
   async createGame(game: Games, file: File): Promise<void> {

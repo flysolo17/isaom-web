@@ -3,7 +3,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { ToastrService } from 'ngx-toastr';
-import { ISignLanguageLesson } from '../../types/sign-language-lessons.interface';
+import {
+  Dificulty,
+  ISignLanguageLesson,
+} from '../../types/sign-language-lessons.interface';
 import { SignLanguageService } from '../../services/sign-language.service';
 
 @Component({
@@ -24,6 +27,7 @@ export class EditLessonComponent implements OnInit {
       title: ['', Validators.required],
       desc: ['', Validators.required],
       videoId: ['', Validators.required],
+      dificulty: [Dificulty.BEGINNER, Validators.required],
     });
   }
   ngOnInit(): void {
@@ -31,6 +35,7 @@ export class EditLessonComponent implements OnInit {
       title: this.lesson.title,
       desc: this.lesson.desc,
       videoId: this.lesson.videoId,
+      dificulty: this.lesson.dificulty,
     });
   }
 
@@ -41,6 +46,7 @@ export class EditLessonComponent implements OnInit {
       title: data.title,
       desc: data.desc,
       videoId: data.videoId,
+      dificulty: data.dificulty,
     };
     if (this.lessonForm$.invalid) {
       this.toastr.error('Please fill up all form');

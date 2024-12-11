@@ -10,9 +10,11 @@ import { Router } from '@angular/router';
 export class ProfileComponent {
   user$ = this.authService.getCurrentUser();
   constructor(private authService: AuthService, private router: Router) {}
-
   logout() {
     this.authService.logout();
-    this.router.navigate(['/']);
+
+    this.router.navigate(['/'], { replaceUrl: true }).then(() => {
+      window.location.reload();
+    });
   }
 }

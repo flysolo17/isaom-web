@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { authActions } from './auth/store/actions';
+import { SignLanguageService } from './main/services/sign-language.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,10 @@ import { authActions } from './auth/store/actions';
 })
 export class AppComponent implements OnInit {
   title = 'isaom-web';
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private signLanguage: SignLanguageService
+  ) {}
   ngOnInit(): void {
     this.store.dispatch(authActions.getCurrentUser());
   }

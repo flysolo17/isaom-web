@@ -5,12 +5,15 @@ import {
   deleteDoc,
   doc,
   Firestore,
+  getDocs,
   orderBy,
   query,
   setDoc,
   updateDoc,
+  writeBatch,
 } from '@angular/fire/firestore';
 import {
+  Dificulty,
   ISignLanguageLesson,
   ISignLanguageLessonsConverter,
 } from '../types/sign-language-lessons.interface';
@@ -21,6 +24,20 @@ export const SIGN_LANGUAGE_COLLECTIONS = 'sign-language-lessons';
 })
 export class SignLanguageService {
   constructor(private firestore: Firestore) {}
+
+  //used only to when i add dificulty field
+  // async addDificultyField() {
+  //   let batch = writeBatch(this.firestore);
+  //   const lessons = await getDocs(
+  //     collection(this.firestore, SIGN_LANGUAGE_COLLECTIONS).withConverter(
+  //       ISignLanguageLessonsConverter
+  //     )
+  //   );
+  //   lessons.forEach((e) => {
+  //     batch.update(e.ref, { dificulty: Dificulty.BEGINNER });
+  //   });
+  //   return batch.commit();
+  // }
   addSignLanguageLesson(signLanguageLesson: ISignLanguageLesson) {
     return from(
       setDoc(

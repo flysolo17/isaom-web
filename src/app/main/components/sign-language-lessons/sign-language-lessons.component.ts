@@ -5,10 +5,13 @@ import {
   OnInit,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { ISignLanguageLesson } from '../../types/sign-language-lessons.interface';
+import {
+  Dificulty,
+  ISignLanguageLesson,
+} from '../../types/sign-language-lessons.interface';
 import { lessonActions } from '../../store/lessons/actions';
 import { generateRandomString } from '../../../app.module';
-import { combineLatest } from 'rxjs';
+import { combineLatest, map } from 'rxjs';
 import {
   selectError,
   selectIsLoading,
@@ -30,15 +33,40 @@ export class SignLanguageLessonsComponent implements OnInit {
   modalService = inject(NgbModal);
   lessonState$ = combineLatest({
     isLoading: this.store.select(selectIsLoading),
-    lessons: this.store.select(selectLessons),
     error: this.store.select(selectError),
   });
+
+  tabs: string[] = [
+    'ALL',
+    Dificulty.BEGINNER,
+    Dificulty.INTERMEDIATE,
+    Dificulty.ADVANCED,
+  ];
+  selectedTab: string = 'ALL';
+  lessons$ = this.store.select(selectLessons);
+
+  filteredLessons$ = combineLatest([
+    this.lessons$,
+    this.store.select(selectLessons),
+  ]).pipe(map(([lessons]) => lessons));
 
   constructor(private store: Store, private sanitizer: DomSanitizer) {}
   ngOnInit(): void {
     this.store.dispatch(lessonActions.getLessons());
+    console.log(this.filteredLessons$);
   }
 
+  selectTab(tab: string): void {
+    this.selectedTab = tab;
+    console.log(tab);
+    this.filteredLessons$ = this.lessons$.pipe(
+      map((lessons) =>
+        tab === 'ALL'
+          ? lessons
+          : lessons.filter((lesson) => lesson.dificulty.trim() === tab.trim())
+      )
+    );
+  }
   addLesson() {
     const modal = this.modalService.open(CreateLessonsComponent);
   }
@@ -46,6 +74,7 @@ export class SignLanguageLessonsComponent implements OnInit {
     const modal = this.modalService.open(EditLessonComponent);
     modal.componentInstance.lesson = lesson;
   }
+
   delete(lesson: ISignLanguageLesson) {
     const modal = this.modalService.open(DeleteConfirmationComponent);
     modal.componentInstance.message = `Are you sure you want to delele ${lesson.title} ?`;

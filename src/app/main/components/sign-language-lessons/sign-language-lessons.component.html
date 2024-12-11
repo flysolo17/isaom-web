@@ -1,54 +1,59 @@
 <div class="container-fluid p-3">
-  <div class="d-flex align-items-center justify-content-between p-3">
-    <h4>Lessons</h4>
-    <button class="btn btn-dark" (click)="addLesson()">ADD LESSON</button>
-  </div>
+  <div class="box p-3 bg-white rounded-3">
+    <div class="d-flex align-items-center justify-content-between p-3">
+      <h5>Sign Language</h5>
+      <button class="btn btn-dark" (click)="addLesson()">ADD LESSON</button>
+    </div>
 
-  <div *ngIf="lessonState$ | async as lessonState">
-    <div *ngIf="lessonState.error">{{ lessonState.error }}</div>
-    <div *ngIf="lessonState.lessons">
-      <div class="row row-cols-3 g-2 p-3">
-        <div class="col" *ngFor="let lesson of lessonState.lessons">
-          <div class="card container-fluid">
-            <div class="ratio ratio-16x9">
-              <iframe
-                [src]="getSanitizedUrl(lesson.videoId)"
-                width="100%"
-                height="100%"
-                class="rounded-3"
-                frameborder="0"
-                allow=" autoplay; clipboard-write; encrypted-media;  picture-in-picture"
-                allowfullscreen
-              >
-              </iframe>
-            </div>
-            <div class="d-flex gap-2 p-3 align-items-center">
-              <div class="flex-grow-1">
-                <h5>{{ lesson.title }}</h5>
-                <p>{{ lesson.desc }}</p>
-              </div>
-              <div ngbDropdown class="d-inline-block">
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary"
-                  id="dropdownEdit"
-                  ngbDropdownToggle
-                >
-                  Edit
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownEdit">
-                  <button ngbDropdownItem (click)="editLesson(lesson)">
-                    Edit
-                  </button>
-                  <button ngbDropdownItem (click)="delete(lesson)">
-                    Delete
-                  </button>
+    <ul ngbNav #nav="ngbNav" class="nav nav-pills p-3">
+      <li ngbNavItem *ngFor="let tab of tabs">
+        <button ngbNavLink (click)="selectTab(tab)">{{ tab }}</button>
+        <ng-template ngbNavContent>
+          <div class="row row-cols-3 g-2 p-3">
+            <div class="col" *ngFor="let lesson of filteredLessons$ | async">
+              <div class="card container-fluid">
+                <div class="ratio ratio-16x9">
+                  <iframe
+                    [src]="getSanitizedUrl(lesson.videoId)"
+                    width="100%"
+                    height="100%"
+                    class="rounded-3"
+                    frameborder="0"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
+                </div>
+                <div class="d-flex gap-2 p-3 align-items-center">
+                  <div class="flex-grow-1">
+                    <h5>{{ lesson.title }}</h5>
+                    <p>{{ lesson.desc }}</p>
+                  </div>
+                  <div ngbDropdown class="d-inline-block">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                      id="dropdownEdit"
+                      ngbDropdownToggle
+                    >
+                      Edit
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownEdit">
+                      <button ngbDropdownItem (click)="editLesson(lesson)">
+                        Edit
+                      </button>
+                      <button ngbDropdownItem (click)="delete(lesson)">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        </ng-template>
+      </li>
+    </ul>
+
+    <div [ngbNavOutlet]="nav"></div>
   </div>
 </div>

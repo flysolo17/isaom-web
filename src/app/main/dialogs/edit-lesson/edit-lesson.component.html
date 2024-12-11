@@ -31,6 +31,20 @@
       />
       <label for="videoId">Enter Youtube Video ID</label>
     </div>
+
+    <div class="form-floating">
+      <select
+        class="form-select"
+        id="dificulty"
+        aria-label="Enter dificulty"
+        formControlName="dificulty"
+      >
+        <option value="BEGINNER" selected>BEGINNER</option>
+        <option value="INTERMEDIATE">INTERMEDIATE</option>
+        <option value="ADVANCED">ADVANCED</option>
+      </select>
+      <label for="floatingSelect">Select Dificulty</label>
+    </div>
     <div class="modal-footer">
       <button
         class="btn btn-danger"

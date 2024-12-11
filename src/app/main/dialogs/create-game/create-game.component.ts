@@ -44,6 +44,7 @@ export class CreateGameComponent {
       cover: '',
       createdAt: new Date(),
       timer: this.gameForm.value.timer,
+      questions: [],
     };
 
     try {

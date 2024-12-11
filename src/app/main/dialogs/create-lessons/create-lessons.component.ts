@@ -1,7 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ISignLanguageLesson } from '../../types/sign-language-lessons.interface';
+import {
+  Dificulty,
+  ISignLanguageLesson,
+} from '../../types/sign-language-lessons.interface';
 import { generateRandomString } from '../../../app.module';
 import { Store } from '@ngrx/store';
 import { lessonActions } from '../../store/lessons/actions';
@@ -24,6 +27,7 @@ export class CreateLessonsComponent {
       title: ['', Validators.required],
       desc: ['', Validators.required],
       videoId: ['', Validators.required],
+      dificulty: [Dificulty.BEGINNER, Validators.required],
     });
   }
   createLesson() {
@@ -34,6 +38,7 @@ export class CreateLessonsComponent {
       desc: data.desc ?? '',
       videoId: data.videoId ?? '',
       createdAt: new Date(),
+      dificulty: data.dificulty ?? Dificulty.BEGINNER,
     };
     if (this.lessonForm$.invalid) {
       this.toastr.error('Please fill up all form');

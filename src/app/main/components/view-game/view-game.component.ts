@@ -42,6 +42,12 @@ export class ViewGameComponent implements OnInit {
       ]).pipe(switchMap(([games, levels]) => of({ games, levels })));
     }
   }
+
+  update(gameID: string, levels: Levels[]) {
+    let questions = levels.map((e) => e.id);
+    this.gameService.addQuestionID(gameID, questions);
+    console.log('Updated');
+  }
   createLevel(id: string) {
     const modal = this.modalService.open(CreateLevelComponent);
     modal.componentInstance.gameID = id;

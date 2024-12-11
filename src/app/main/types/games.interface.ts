@@ -3,6 +3,7 @@ import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 export interface Games {
   id: string;
   title: string;
+  questions: string[];
   timer: number;
   cover: string;
   createdAt: Date;

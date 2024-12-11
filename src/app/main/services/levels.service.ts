@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
   addDoc,
+  arrayRemove,
+  arrayUnion,
   collection,
   collectionData,
   CollectionReference,
@@ -10,6 +12,8 @@ import {
   orderBy,
   query,
   setDoc,
+  updateDoc,
+  writeBatch,
 } from '@angular/fire/firestore';
 import {
   deleteObject,
@@ -24,6 +28,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { GAME_COLLECTION } from './game.service';
 import { generateRandomString } from '../../app.module';
+import { gameConverter } from '../types/games.interface';
 export const LEVELS_COLLECTION = 'levels';
 @Injectable({
   providedIn: 'root',
@@ -38,59 +43,81 @@ export class LevelsService {
   ) {
     this.levelsRef$ = collection(firestore, LEVELS_COLLECTION);
   }
-
   async addLevels(gameID: string, levels: Levels, file: File): Promise<void> {
     try {
+      const batch = writeBatch(this.firestore);
+
       const fireRef = ref(
         this.storage,
         `${LEVELS_COLLECTION}/${generateRandomString(8)}`
       );
-
       const snapshot = await uploadBytes(fireRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
-      // Create the question entry in Firestore
       const newQuestion: Levels = {
         ...levels,
         image: downloadURL,
         createdAt: new Date(),
       };
 
-      await setDoc(
-        doc(
-          collection(
-            this.firestore,
-            `${GAME_COLLECTION}/${gameID}/${LEVELS_COLLECTION}`
-          ),
-          newQuestion.id
+      const gameRef = doc(
+        this.firestore,
+        GAME_COLLECTION,
+        gameID
+      ).withConverter(gameConverter);
+
+      batch.update(gameRef, {
+        questions: arrayUnion(newQuestion.id),
+      });
+
+      const levelDocRef = doc(
+        collection(
+          this.firestore,
+          `${GAME_COLLECTION}/${gameID}/${LEVELS_COLLECTION}`
         ),
-        newQuestion
+        newQuestion.id
       );
+      batch.set(levelDocRef, newQuestion);
+
+      await batch.commit();
 
       this.toastr.success('Successfully Added!');
     } catch (error) {
+      console.error('Error adding levels:', error);
       this.toastr.error('Error creating question');
     }
   }
 
   async deleteLevels(gameID: string, level: Levels): Promise<void> {
     try {
-      // Delete the question document from Firestore
-      await deleteDoc(
-        doc(
-          collection(
-            this.firestore,
-            `${GAME_COLLECTION}/${gameID}/${LEVELS_COLLECTION}`
-          ),
-          level.id
-        )
+      const batch = writeBatch(this.firestore);
+
+      const levelDocRef = doc(
+        collection(
+          this.firestore,
+          `${GAME_COLLECTION}/${gameID}/${LEVELS_COLLECTION}`
+        ),
+        level.id
       );
-      // Delete the question image from Firebase Storage
+
+      batch.delete(levelDocRef);
+
+      const gameRef = doc(
+        this.firestore,
+        GAME_COLLECTION,
+        gameID
+      ).withConverter(gameConverter);
+      batch.update(gameRef, {
+        questions: arrayRemove(level.id),
+      });
+
+      await batch.commit();
+
       await deleteObject(ref(this.storage, level.image));
 
       this.toastr.success('Successfully Deleted!');
     } catch (error) {
-      console.log(error);
+      console.error('Error deleting level:', error);
       this.toastr.error('Error Deleting question');
     }
   }
