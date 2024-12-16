@@ -132,4 +132,25 @@ export class LevelsService {
     );
     return collectionData(q);
   }
+  async editItem(newItem: Levels,newImage : File | null , gameID: string) {
+  
+    if (newImage !== null) {
+      const fireRef = ref(
+        this.storage,
+        `${LEVELS_COLLECTION}/${generateRandomString(8)}`
+      );
+      const snapshot = await uploadBytes(fireRef, newImage);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      newItem.image = downloadURL
+    }
+
+    const docRef = doc(
+      this.firestore,
+      `${GAME_COLLECTION}/${gameID}/${LEVELS_COLLECTION}`,
+      newItem.id 
+    );
+  
+    return updateDoc(docRef, { ...newItem });
+  }
+  
 }

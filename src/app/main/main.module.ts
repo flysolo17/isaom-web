@@ -30,9 +30,9 @@ import { CreateGameComponent } from './dialogs/create-game/create-game.component
 import { ViewGameComponent } from './components/view-game/view-game.component';
 import { CreateLevelComponent } from './dialogs/create-level/create-level.component';
 import { AssignTeacherComponent } from './dialogs/assign-teacher/assign-teacher.component';
-import { EditLevelComponent } from './dialogs/edit-level/edit-level.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ViewLeaderboardComponent } from './components/view-leaderboard/view-leaderboard.component';
+import { EditItemComponent } from './dialogs/edit-item/edit-item.component';
 
 @NgModule({
   declarations: [
@@ -57,9 +57,9 @@ import { ViewLeaderboardComponent } from './components/view-leaderboard/view-lea
     ViewGameComponent,
     CreateLevelComponent,
     AssignTeacherComponent,
-    EditLevelComponent,
     ProfileComponent,
     ViewLeaderboardComponent,
+    EditItemComponent,
   ],
   imports: [
     CommonModule,

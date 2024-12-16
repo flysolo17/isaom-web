@@ -10,6 +10,7 @@ import { CreateLevelComponent } from '../../dialogs/create-level/create-level.co
 import { DeleteConfirmationComponent } from '../../dialogs/delete-confirmation/delete-confirmation.component';
 import { ToastrService } from 'ngx-toastr';
 import { Location } from '@angular/common';
+import { EditItemComponent } from '../../dialogs/edit-item/edit-item.component';
 
 export interface GameState {
   games: Games | undefined;
@@ -70,5 +71,10 @@ export class ViewGameComponent implements OnInit {
         this.gameService.deleteGame(game);
       }
     });
+  }
+  editItem(editLevel: Levels) {
+    const modal = this.modalService.open(EditItemComponent);
+    modal.componentInstance.item = editLevel;
+    modal.componentInstance.gameID = this.gameID;
   }
 }

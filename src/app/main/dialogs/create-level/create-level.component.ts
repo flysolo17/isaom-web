@@ -60,7 +60,6 @@ export class CreateLevelComponent {
 
     this.levelService
       .addLevels(this.gameID, level, this.selectedFile)
-
       .finally(() => {
         this.levelForm$.reset();
         this.selectedFile = null;
